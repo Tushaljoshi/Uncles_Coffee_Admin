@@ -15,8 +15,6 @@ import {
   Clock,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { auth } from "../firebase.js";
-import { signOut } from "firebase/auth";
 
 const TopBar = ({ toggleSidebar, sticky = true }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -31,59 +29,25 @@ const TopBar = ({ toggleSidebar, sticky = true }) => {
   /* ================= PAGE INFO ================= */
 
   const pageInfo = {
-    "/customer-profile": {
-      title: "Customer Profile",
-      subtitle: "A complete overview of platform activity, growth, and performance",
+    "/dashboard": {
+      title: "Analytics Dashboard",
+      subtitle: "Cafe sales, menu, bookings, and payment insights",
     },
-
-    "/mechanic-profile": {
-      title: "Mechanic Profiles",
-      subtitle: "View, verify, and manage registered mechanics and their details",
+    "/menu": {
+      title: "Menu Management",
+      subtitle: "Manage your cafe menu and availability",
     },
-
-    "/mechanic-status": {
-      title: "Mechanic Status Tracking",
-      subtitle: "Track mechanic online and offline status changes daily, weekly, and monthly",
+    "/tables": {
+      title: "Table Management",
+      subtitle: "Manage seating areas and guest availability",
     },
-
-    "/mechanicaservices": {
-      title: "Mechanic Services",
-      subtitle: "Manage service categories, skills, and offerings by mechanics",
+    "/orders": {
+      title: "Order Management",
+      subtitle: "Track kitchen progress and customer payments",
     },
-
-    "/service": {
-      title: "Create Service",
-      subtitle: "Add and configure new services available on the platform",
-    },
-
-    "/job-part": {
-      title: "Job Parts",
-      subtitle: "Create and manage job parts for each vehicle type",
-    },
-
-    "/help": {
-      title: "Support Tickets",
-      subtitle: "Track, respond to, and resolve customer support requests",
-    },
-
-    "/dispute": {
-      title: "Dispute Management",
-      subtitle: "Review, track, and resolve disputes raised by customers",
-    },
-
-    "/plan": {
-      title: "Subscriptions",
-      subtitle: "Create and manage subscription plans and pricing",
-    },
-
-    "/add-banner": {
-      title: "Media & Banners",
-      subtitle: "Upload, manage, and control promotional banners and media assets",
-    },
-
-    "/add-review": {
-      title: "Reviews & Ratings",
-      subtitle: "Manage customer video testimonials, ratings, and feedback profiles",
+    "/bookings": {
+      title: "Booking Management",
+      subtitle: "Track reservations and confirm counter payments",
     },
   };
 
@@ -95,35 +59,31 @@ const TopBar = ({ toggleSidebar, sticky = true }) => {
 
   /* ================= LOGOUT ================= */
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } finally {
-      localStorage.clear();
-      navigate("/");
-    }
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate("/");
   };
 
   return (
-    <div className={`w-full bg-white border-b border-gray-200 shadow-sm ${sticky ? "sticky top-0 z-50" : ""}`}>
+    <div className={`w-full bg-white border-b border-latte shadow-sm ${sticky ? "sticky top-0 z-40" : ""}`}>
       <div className="flex items-center justify-between px-4 lg:px-6 py-3">
 
         {/* LEFT */}
         <div className="flex items-center gap-4">
           <button
             onClick={toggleSidebar}
-            className="p-2 rounded-md hover:bg-red-50 active:bg-red-100 transition"
+            aria-label="Toggle sidebar"
+            className="p-2 rounded-md hover:bg-latte active:bg-latte transition"
           >
-            <Menu size={22} className="text-gray-800 hover:text-red-600" />
+            <Menu size={22} className="text-espresso hover:text-caramel" />
           </button>
 
           <div>
-            <h1 className="text-lg lg:text-xl font-semibold text-gray-800 relative">
+            <h1 className="text-lg lg:text-xl font-semibold text-espresso relative">
               {currentPage.title}
-              {/* red underline */}
-              <span className="absolute left-0 -bottom-1 h-0.5 w-10 bg-red-600 rounded-full"></span>
+            <span className="absolute left-0 -bottom-1 h-0.5 w-10 bg-caramel rounded-full"></span>
             </h1>
-            <p className="hidden sm:block mt-2 text-gray-500 text-xs lg:text-sm">
+            <p className="hidden sm:block mt-2 text-espresso/60 text-xs lg:text-sm">
               {currentPage.subtitle}
             </p>
           </div>
@@ -136,54 +96,54 @@ const TopBar = ({ toggleSidebar, sticky = true }) => {
           <div className="relative">
             {/*<button
               onClick={() => setShowNotifications(!showNotifications)}
-              className="p-2 border border-gray-200 rounded-full hover:bg-red-50 relative transition"
+              className="p-2 border border-latte rounded-full hover:bg-latte relative transition"
             >
-              <Bell size={18} className="text-gray-800 hover:text-red-600" />
+              <Bell size={18} className="text-espresso hover:text-caramel" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                <span className="absolute -top-1 -right-1 bg-caramel text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </span>
               )}
               </button>*/}
 
             {showNotifications && (
-              <div className="absolute right-0 mt-3 w-80 bg-white border border-gray-200 rounded-xl shadow-xl">
+              <div className="absolute right-0 mt-3 w-80 bg-white border border-latte rounded-xl shadow-xl">
                 <div className="flex justify-between items-center p-4 border-b">
-                  <h2 className="text-lg font-semibold text-gray-800">
+                  <h2 className="text-lg font-semibold text-espresso">
                     Notifications
                   </h2>
                   <X
                     size={18}
                     onClick={() => setShowNotifications(false)}
-                    className="cursor-pointer text-gray-500 hover:text-red-600"
+                    className="cursor-pointer text-espresso/60 hover:text-caramel"
                   />
                 </div>
 
                 <div className="max-h-72 overflow-y-auto">
                   {loading ? (
                     <div className="flex justify-center p-6">
-                      <div className="animate-spin h-6 w-6 border-b-2 border-red-600 rounded-full"></div>
+                      <div className="animate-spin h-6 w-6 border-b-2 border-caramel rounded-full"></div>
                     </div>
                   ) : notifications.length === 0 ? (
-                    <div className="text-center p-6 text-gray-500">
+                    <div className="text-center p-6 text-espresso/60">
                       No notifications
                     </div>
                   ) : (
                     notifications.map((n) => (
                       <div
                         key={n._id}
-                        className={`p-4 border-b cursor-pointer hover:bg-red-50 flex gap-3 ${!n.isRead
-                          ? "bg-red-50 border-l-4 border-red-600"
+                        className={`p-4 border-b cursor-pointer hover:bg-latte flex gap-3 ${!n.isRead
+                          ? "bg-latte border-l-4 border-caramel"
                           : ""
                           }`}
                       >
-                        <Info size={18} className="text-red-600" />
+                        <Info size={18} className="text-caramel" />
                         <div className="flex-1">
-                          <p className="font-semibold text-gray-800">
+                          <p className="font-semibold text-espresso">
                             {n.title}
                           </p>
-                          <p className="text-sm text-gray-600">{n.message}</p>
-                          <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
+                          <p className="text-sm text-espresso/70">{n.message}</p>
+                          <div className="flex items-center gap-1 text-xs text-espresso/45 mt-1">
                             <Clock size={12} />
                             {n.createdAt}
                           </div>
@@ -193,7 +153,7 @@ const TopBar = ({ toggleSidebar, sticky = true }) => {
                   )}
                 </div>
 
-                <button className="w-full py-2 text-sm text-red-600 hover:bg-red-50 border-t font-medium">
+                <button className="w-full py-2 text-sm text-caramel hover:bg-latte border-t font-medium">
                   Mark all as read
                 </button>
               </div>
@@ -204,31 +164,30 @@ const TopBar = ({ toggleSidebar, sticky = true }) => {
           <div className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 border border-gray-200 rounded-full px-2 py-1 hover:bg-red-50 transition"
+              aria-label="Open admin menu"
+              className="flex items-center gap-2 border border-latte rounded-full px-2 py-1 hover:bg-latte transition"
             >
-              <img
-                src="/admin.png"
-                alt="Admin"
-                className="w-8 h-8 rounded-full"
-              />
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-latte text-caramel">
+                <User size={17} />
+              </span>
               <div className="hidden sm:block text-left">
-                <p className="text-sm font-bold text-black tracking-wide">
-                  BOOK MY MECHANIK<span className="align-top text-md ml-0">™</span>
+                <p className="text-sm font-bold text-espresso tracking-wide">
+                  Uncle's Coffee<span className="align-top text-md ml-0">™</span>
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-espresso/60">
                   Admin Panel
                 </p>
               </div>
-              <ChevronDown size={16} className="text-gray-500" />
+              <ChevronDown size={16} className="text-espresso/60" />
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow-lg py-2">
+              <div className="absolute right-0 mt-2 w-44 rounded-lg border border-latte bg-white py-2 shadow-lg">
                 <button
                   onClick={handleLogout}
-                  className="w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2 font-medium"
+                  className="w-full px-4 py-2 text-sm text-caramel hover:bg-latte flex items-center gap-2 font-medium"
                 >
-                  <span className="w-2 h-2 bg-red-600 rounded-full"></span>
+                  <span className="w-2 h-2 bg-caramel rounded-full"></span>
                   Logout
                 </button>
               </div>

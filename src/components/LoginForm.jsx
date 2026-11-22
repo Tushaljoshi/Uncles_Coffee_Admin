@@ -1,243 +1,135 @@
 import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { auth } from "../firebase.js";
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  getIdToken,
-} from "firebase/auth";
 
-const LoginForm = () => {
+function Login() {
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({ login: "", password: "" });
-  const [error, setError] = useState("");
-  const [popup, setPopup] = useState({ show: false, type: "", message: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [forgotPasswordEmail, setForgotPasswordEmail] = useState("");
-  const [forgotPasswordLoading, setForgotPasswordLoading] = useState(false);
+  const adminEmail = "unclescoffee@gmail.com";
+  const adminPassword = "123456";
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleLogin = (event) => {
+    event.preventDefault();
     setError("");
+    setSuccess("");
 
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        formData.login,
-        formData.password
-      );
-
-      const user = userCredential.user;
-      const idToken = await getIdToken(user);
-
-      localStorage.setItem("adminToken", idToken);
-      localStorage.setItem(
-        "adminUser",
-        JSON.stringify({
-          name: user.displayName || "Admin",
-          email: user.email,
-          uid: user.uid,
-          role: "admin",
-        })
-      );
-
-      setPopup({
-        show: true,
-        type: "success",
-        message: "Welcome to BookMyMechanik Admin",
-      });
-
-      setTimeout(() => {
-        setPopup({ show: false, type: "", message: "" });
-        navigate("/customer-profile");
-      }, 1000);
-    } catch (err) {
+    if (email === adminEmail && password === adminPassword) {
+      setSuccess("Welcome to Uncle's Coffee!");
+      setTimeout(() => navigate("/menu"), 1000);
+    } else {
       setError("Invalid credentials. Please try again.");
-      setPopup({
-        show: true,
-        type: "error",
-        message: "Invalid credentials. Please try again.",
-      });
-
-      setTimeout(() => setPopup({ show: false, type: "", message: "" }), 3000);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /* ================= FORGOT PASSWORD ================= */
-  const handleForgotPassword = async (e) => {
-    e.preventDefault();
-    setForgotPasswordLoading(true);
-    setError("");
-
-    try {
-      await sendPasswordResetEmail(auth, forgotPasswordEmail);
-
-      setPopup({
-        show: true,
-        type: "success",
-        message: "Password reset link sent. Check your email 📩",
-      });
-
-      setTimeout(() => {
-        setPopup({ show: false, type: "", message: "" });
-        setShowForgotPassword(false);
-        setForgotPasswordEmail("");
-      }, 3000);
-    } catch (err) {
-      setPopup({
-        show: true,
-        type: "error",
-        message: "Failed to send reset email.",
-      });
-
-      setTimeout(() => setPopup({ show: false, type: "", message: "" }), 3000);
-    } finally {
-      setForgotPasswordLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-lightGray flex flex-col items-center justify-center px-4">
-      {/* Brand */}
-      <div className="mb-6 text-center">
-        <img src="/logo.png" alt="BookMyMechanik" className="h-28 mx-auto mb-2" />
-        <h1 className="text-2xl font-bold text-black tracking-wide">
-          BOOK MY MECHANIK<span className="align-top text-md ml-0">™</span>
-        </h1>
-      </div>
-
-      {/* Login Card */}
-      <div className="w-full max-w-md bg-white border border-gray-200 shadow-lg rounded-2xl p-8">
-        <h2 className="text-xl font-semibold text-center text-darkGray mb-6">
-          Admin Dashboard Login
-        </h2>
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Email */}
-          <div>
-            <label className="block text-darkGray font-medium mb-1 text-sm">
-              Email
-            </label>
-            <input
-              type="email"
-              name="login"
-              value={formData.login}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg
-              focus:ring-2 focus:ring-primary focus:outline-none"
-              placeholder="admin@bookmymechanik.com"
-            />
-          </div>
-
-          {/* Password */}
-          <div className="relative">
-            <label className="block text-darkGray font-medium mb-1 text-sm">
-              Password
-            </label>
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg
-              focus:ring-2 focus:ring-primary focus:outline-none pr-10"
-              placeholder="Enter password"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-8 text-gray-500 hover:text-primary"
-            >
-              {showPassword ? <FiEyeOff /> : <FiEye />}
-            </button>
-          </div>
-
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary hover:bg-primaryHover text-white
-            font-semibold py-2 rounded-lg transition disabled:opacity-50"
+    <main className="flex min-h-screen items-center justify-center bg-cream px-4 py-10 text-espresso">
+      <div className="w-full max-w-md">
+        <header className="mb-8 text-center">
+          <div
+            aria-hidden="true"
+            className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-latte text-2xl"
           >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => setShowForgotPassword(true)}
-              className="text-sm text-darkGray hover:text-primary"
-            >
-              Forgot Password?
-            </button>
-          </div>
-        </form>
-      </div>
-
-      {/* Forgot Password Modal */}
-      {showForgotPassword && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-xl p-6 w-full max-w-md relative">
-            <button
-              onClick={() => setShowForgotPassword(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-            >
-              ✕
-            </button>
-
-            <h3 className="text-lg font-semibold text-darkGray mb-4">
-              Reset Password
-            </h3>
-
-            <form onSubmit={handleForgotPassword} className="space-y-4">
-              <input
-                type="email"
-                value={forgotPasswordEmail}
-                onChange={(e) => setForgotPasswordEmail(e.target.value)}
-                required
-                placeholder="Enter your email"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg
-                focus:ring-2 focus:ring-primary focus:outline-none"
+            <img
+                src="/logo.png"
+                alt="Uncle's Coffee Logo"
+                className="
+                  h-10
+                  w-10
+                  object-contain
+                  sm:h-12
+                  sm:w-12
+                "
               />
-
-              <button
-                type="submit"
-                disabled={forgotPasswordLoading}
-                className="w-full bg-primary hover:bg-primaryHover text-white
-                font-semibold py-2 rounded-lg transition disabled:opacity-50"
-              >
-                {forgotPasswordLoading ? "Sending..." : "Send Reset Link"}
-              </button>
-            </form>
           </div>
-        </div>
-      )}
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-caramel">
+            Uncle&apos;s Coffee
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight">
+            Admin Dashboard
+          </h1>
+        </header>
 
-      {/* Toast */}
-      {popup.show && (
-        <div
-          className={`fixed top-6 left-1/2 -translate-x-1/2 px-6 py-3 rounded-lg text-white shadow-lg ${popup.type === "success" ? "bg-primary" : "bg-red-600"
-            }`}
-        >
-          {popup.message}
-        </div>
-      )}
-    </div>
+        <section className="rounded-2xl border border-latte bg-white p-6 shadow-xl sm:p-8">
+          <h2 className="mb-6 text-center text-xl font-semibold">
+            Sign in to your account
+          </h2>
+
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div>
+              <label
+                htmlFor="admin-email"
+                className="mb-1.5 block text-sm font-medium text-espresso"
+              >
+                Email
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                autoComplete="username"
+                placeholder="admin@example.com"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                className="w-full rounded-lg border border-latte bg-cream px-4 py-3 text-espresso placeholder:text-espresso/50 focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="admin-password"
+                className="mb-1.5 block text-sm font-medium text-espresso"
+              >
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="admin-password"
+                  type={showPassword ? "text" : "password"}
+                  autoComplete="current-password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                  className="w-full rounded-lg border border-latte bg-cream px-4 py-3 pr-12 text-espresso placeholder:text-espresso/50 focus:border-caramel focus:outline-none focus:ring-2 focus:ring-caramel/30"
+                />
+                <button
+                  type="button"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  onClick={() => setShowPassword((visible) => !visible)}
+                  className="absolute inset-y-0 right-0 flex items-center px-4 text-caramel transition hover:text-caramelHover"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
+            </div>
+
+            {error && (
+              <p role="alert" className="text-sm font-medium text-error">
+                {error}
+              </p>
+            )}
+            {success && (
+              <p role="status" className="text-sm font-medium text-success">
+                {success}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full rounded-lg bg-caramel px-4 py-3 font-semibold text-white transition-colors hover:bg-caramelHover focus:outline-none focus:ring-2 focus:ring-caramel focus:ring-offset-2"
+            >
+              Login
+            </button>
+          </form>
+        </section>
+      </div>
+    </main>
   );
-};
+}
 
-export default LoginForm;
+export default Login;

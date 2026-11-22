@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-cream text-espresso;
+  }
+}
+
 @keyframes slide-up {
     from {
       transform: translateY(20px);
@@ -25,7 +31,7 @@
   /* Responsive scrollbar styling */
   .scrollbar-sm {
     scrollbar-width: thin;
-    scrollbar-color: #d1d5db #f3f4f6;
+    scrollbar-color: #a35d38 #ead8c0;
   }
 
   .scrollbar-sm::-webkit-scrollbar {
@@ -34,16 +40,16 @@
   }
 
   .scrollbar-sm::-webkit-scrollbar-track {
-    background: #f3f4f6;
+    background: #ead8c0;
     border-radius: 10px;
   }
 
   .scrollbar-sm::-webkit-scrollbar-thumb {
-    background: #d1d5db;
+    background: #a35d38;
     border-radius: 10px;
   }
 
   .scrollbar-sm::-webkit-scrollbar-thumb:hover {
-    background: #9ca3af;
+    background: #8f4f30;
   }
   

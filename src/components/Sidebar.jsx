@@ -1,17 +1,10 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  UserCircle,
-  ImageIcon,
-  PackageOpenIcon,
-  CarFrontIcon,
-  CoinsIcon,
-  UserCircle2Icon,
-  BugIcon,
-  HelpCircleIcon,
-  ScanEyeIcon,
-  Wrench,
-  Ticket,
   Activity,
+  CalendarDays,
+  ClipboardList,
+  Coffee,
+  MapPin,
 } from "lucide-react";
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
@@ -19,35 +12,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   const menu = [
     {
-      section: "Main Menu",
+      section: "Cafe management",
       items: [
-        { label: "Customer Profiles", icon: UserCircle, path: "/customer-profile" },
-        { label: "Customer Vehicles", icon: CarFrontIcon, path: "/customer-vehicles" },
-        { label: "Mechanic Profiles", icon: UserCircle2Icon, path: "/mechanic-profile" },
-        { label: "Mechanic Status", icon: Activity, path: "/mechanic-status" },
+        { label: "Dashboard", icon: Activity, path: "/dashboard" },
+        { label: "Menu", icon: Coffee, path: "/menu" },
+        { label: "Tables", icon: MapPin, path: "/tables" },
+        { label: "Orders", icon: ClipboardList, path: "/orders" },
+        { label: "Bookings", icon: CalendarDays, path: "/bookings" },
       ],
-    },
-    {
-      section: "Management",
-      items: [
-        { label: "Add Banner", icon: ImageIcon, path: "/add-banner" },
-        { label: "Add Review", icon: ScanEyeIcon, path: "/add-review" },
-        { label: "Create Services", icon: CarFrontIcon, path: "/service" },
-        { label: "Add Spare Parts", icon: Wrench, path: "/job-part" },
-        { label: "SOS Vehicle Issues", icon: ScanEyeIcon, path: "/visible-issues" },
-        { label: "Create Subscription", icon: CoinsIcon, path: "/plan" },
-        { label: "Mechanic Services", icon: PackageOpenIcon, path: "/mechanicaservices" },
-        { label: "Landing Bookings", icon: PackageOpenIcon, path: "/customer-booking" },
-        { label: "Service Tickets", icon: Ticket, path: "/service-tickets" },
-        { label: "Assign Mechanic", icon: Wrench, path: "/admin-assign-mechanic" },
-      ],
-    },
-    {
-      section: "Support",
-      items: [{ label: "Support Tickets", icon: HelpCircleIcon, path: "/help" },
-      { label: "Disputes", icon: BugIcon, path: "/dispute" },
-      ],
-
     },
   ];
 
@@ -58,25 +30,25 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-full w-60 sm:w-64 lg:w-60 bg-white shadow-xl border-r border-gray-200
+      className={`fixed top-0 left-0 h-full w-60 sm:w-64 lg:w-60 bg-white shadow-xl border-r border-latte
       transform transition-all duration-300 z-50
       ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      lg:${isOpen ? "translate-x-0" : "-translate-x-full"}`}
+      lg:translate-x-0`}
     >
       {/* HEADER */}
       <div className="flex items-center justify-between px-4 sm:px-5 py-4 border-b">
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">
-            <h1 className="text-md font-bold  text-black tracking-wide">
-              BOOK MY MECHANiK<span className="align-top text-md ml-0">™</span>
+            <h1 className="text-md font-bold text-espresso tracking-wide">
+              Uncle's Coffee<span className="align-top text-md ml-0">™</span>
             </h1>
-            <p className="text-[10px] text-gray-500 -mt-1">
+            <p className="text-[10px] text-espresso/60 -mt-1">
               Admin Panel
             </p>
           </div>
         </div>
         <button
-          className="text-gray-600 text-lg hover:text-red-600 hover:bg-red-50 p-1 rounded transition-colors lg:hidden"
+          className="text-espresso text-lg hover:text-caramel hover:bg-latte p-1 rounded transition-colors lg:hidden"
           onClick={toggleSidebar}
         >
           ✕
@@ -87,7 +59,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <div className="px-4 py-3 overflow-y-auto h-[calc(100%-70px)]">
         {menu.map((section, index) => (
           <div key={index} className="mb-5">
-            <p className="uppercase text-[11px] text-gray-400 font-semibold mb-2">
+            <p className="uppercase text-[11px] text-espresso/50 font-semibold mb-2">
               {section.section}
             </p>
 
@@ -102,8 +74,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                     className={`flex items-center gap-3 w-full px-2 sm:px-3 py-2
                       rounded-md text-xs sm:text-sm transition-all
                       ${active
-                        ? "bg-red-600 text-white font-medium shadow-sm"
-                        : "text-gray-700 hover:bg-red-50 hover:text-red-600"
+                        ? "bg-caramel text-white font-medium shadow-sm"
+                        : "text-espresso hover:bg-latte hover:text-caramel"
                       }`}
                   >
                     <item.icon size={16} />
